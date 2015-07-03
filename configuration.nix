@@ -64,7 +64,9 @@
   };
   users.extraGroups.docker.members = [ "gui" ];
 
-  # services.peerflix.enable = true;
+  services.peerflix.enable = true;
+  services.deluge.enable = true;
+
   services.xserver = {
     enable = true;
     layout = "en";
