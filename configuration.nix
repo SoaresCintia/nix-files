@@ -3,6 +3,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <nixos/modules/programs/command-not-found/command-not-found.nix>
     ];
 
   time.timeZone = "America/Montreal";
@@ -19,13 +20,12 @@
   networking.wireless.enable = true;
 
   i18n = {
-     consoleFont = "lat9w-16";
+     consoleFont = "";
      consoleKeyMap = "us";
      defaultLocale = "en_US.UTF-8";
   };
 
   environment.systemPackages = with pkgs; [
-    acpi
     ansible
     atom
     chromium
@@ -38,6 +38,7 @@
     nixops
     nodejs
     oraclejdk8
+    popcorntime
     rxvt_unicode
     sbt
     scala_2_11
@@ -49,8 +50,11 @@
     xclip
   ];
 
-  services.openssh.enable = true;
-  services.printing.enable = true;
+  # services.openssh.enable = true;
+  # programs.ssh.startAgent = true;
+  # programs.zsh.enable = true;
+
+  # services.printing.enable = true;
 
   users.mutableUsers = true;
   users.extraUsers.gui = {
@@ -62,6 +66,7 @@
     home = "/home/gui";
     shell = "/run/current-system/sw/bin/zsh";
   };
+  security.sudo.wheelNeedsPassword = false;
   users.extraGroups.docker.members = [ "gui" ];
 
   services.peerflix.enable = true;
@@ -121,33 +126,7 @@
 
   virtualisation.docker.enable = true;
 
-  programs.ssh.startAgent = true;
-  programs.zsh.enable = true;
-  programs.zsh.interactiveShellInit =
-  ''
-    # Taken from <nixos/modules/programs/bash/command-not-found.nix>
-    # and adapted to zsh (i.e. changed name from 'handle' to
-    # 'handler').
-    # This function is called whenever a command is not found.
-    command_not_found_handler() {
-      local p=/run/current-system/sw/bin/command-not-found
-      if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
-        # Run the helper program.
-        $p "$1"
-        # Retry the command if we just installed it.
-        if [ $? = 126 ]; then
-          "$@"
-        else
-          return 127
-        fi
-      else
-        echo "$1: command not found" >&2
-        return 127
-      fi
-    }
-  '';
-
-   fonts = {
+  fonts = {
     enableGhostscriptFonts = true;
     fontconfig.enable = true;
     enableCoreFonts = true;
