@@ -38,7 +38,7 @@
     nixops
     nodejs
     oraclejdk8
-    popcorntime
+    # popcorntime
     rxvt_unicode
     sbt
     scala_2_11
