@@ -26,6 +26,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    acpi
     ansible
     atom
     chromium
@@ -33,6 +34,7 @@
     docker
     git
     idea.idea-community
+    mercurial # command-not-found script
     mplayer
     nix
     nixops
@@ -52,9 +54,9 @@
 
   # services.openssh.enable = true;
   # programs.ssh.startAgent = true;
-  # programs.zsh.enable = true;
-
   # services.printing.enable = true;
+  programs.zsh.enable = true;
+  services.peerflix.enable = true;
 
   users.mutableUsers = true;
   users.extraUsers.gui = {
@@ -68,9 +70,6 @@
   };
   security.sudo.wheelNeedsPassword = false;
   users.extraGroups.docker.members = [ "gui" ];
-
-  services.peerflix.enable = true;
-  services.deluge.enable = true;
 
   services.xserver = {
     enable = true;
