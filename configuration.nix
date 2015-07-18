@@ -26,24 +26,32 @@
      defaultLocale = "en_US.UTF-8";
   };
 
+  services.acpid.enable = true;
+  services.acpid.lidEventCommands = ''
+   LID_STATE=/proc/acpi/button/lid/LID0/state
+   if [ $(/run/current-system/sw/bin/awk '{print $2}' $LID_STATE) = 'closed' ]; then
+     systemctl suspend
+   fi
+  '';
+
   environment.systemPackages = with pkgs; [
     acpi
     ansible
     atom
-    chromium
+    chromiumDev
     dmenu
     docker
     git
     #idea.idea-community
+    mercurial
     mplayer
     nix
     nixops
     nodejs
-    oraclejdk8
-    popcorntime
+    #oraclejdk8
     rxvt_unicode
-    sbt
-    scala_2_11
+    #sbt
+    #scala_2_11
     sublime3
     tig
     tree
@@ -56,7 +64,7 @@
   programs.ssh.startAgent = true;
   services.printing.enable = true;
   programs.zsh.enable = true;
-  services.peerflix.enable = true;
+  # services.peerflix.enable = true;
 
   users.mutableUsers = true;
   users.extraUsers.cintia = {
@@ -112,13 +120,13 @@
       enablePepperFlash = true;
       enablePepperPDF = true;
     };
-    oraclejdk8 = {
-      installjce = true;
-    };
-    packageOverrides = pkgs : rec {
-      jdk = pkgs.oraclejdk8;
-      jre = pkgs.oraclejdk8.jre;
-    };
+    # oraclejdk8 = {
+    #   installjce = true;
+    # };
+    # packageOverrides = pkgs : rec {
+    #   jdk = pkgs.oraclejdk8;
+    #   jre = pkgs.oraclejdk8.jre;
+    # };
   };
 
   services.upower.enable = true;
